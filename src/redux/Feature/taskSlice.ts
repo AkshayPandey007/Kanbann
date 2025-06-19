@@ -17,6 +17,7 @@ export interface Task {
 interface TaskState {
   tasks: Task[];
   loading: boolean;
+  reorderLoading: boolean;
   error: string | null;
 }
 
@@ -83,6 +84,7 @@ export const cloneTask = createAsyncThunk('tasks/clone', async (id: string) => {
 const initialState: TaskState = {
   tasks: [],
   loading: false,
+  reorderLoading:false,
   error: null
 };
 
@@ -115,7 +117,7 @@ const taskSlice = createSlice({
         state.tasks = state.tasks.filter((t) => t._id !== action.payload);
       })
       .addCase(reorderTasks.pending, (state) => {
-        // state.loading = true;
+        state.reorderLoading = true;
       })
      .addCase(reorderTasks.fulfilled, (state, action: PayloadAction<any[]>) => {
   action.payload.forEach((updated) => {
@@ -127,7 +129,7 @@ const taskSlice = createSlice({
   });
 })
       .addCase(reorderTasks.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false;
+        state.reorderLoading = false;
         state.error = action.payload as string;
       })
       .addCase(cloneTask.fulfilled, (state, action: PayloadAction<Task>) => {
