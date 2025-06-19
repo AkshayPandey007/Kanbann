@@ -115,12 +115,17 @@ const taskSlice = createSlice({
         state.tasks = state.tasks.filter((t) => t._id !== action.payload);
       })
       .addCase(reorderTasks.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
       })
-      .addCase(reorderTasks.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
+     .addCase(reorderTasks.fulfilled, (state, action: PayloadAction<any[]>) => {
+  action.payload.forEach((updated) => {
+    const task = state.tasks.find((t: any) => t._id === updated._id);
+    if (task) {
+      task.position = updated.position;
+      task.status = updated.status;
+    }
+  });
+})
       .addCase(reorderTasks.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload as string;

@@ -84,7 +84,7 @@ const BoardView = ({ board }: { board: any }) => {
     // Reorder in backend
     try {
       await dispatch(reorderTasks(reorderedTasks) as any)
-      dispatch(fetchTasksByBoard(board._id) as any)
+      // dispatch(fetchTasksByBoard(board._id) as any)
     } catch (err) {
       console.error('Reorder failed', err)
     }
