@@ -15,13 +15,14 @@ import {
   reorderTasks,
   updateTask
 } from '../redux/Feature/taskSlice'
+import TaskCardSkeleton from './TaskCardSkeleton'
 
 const columns = ['To Do', 'In Progress', 'Done']
 
 
 const BoardView = ({ board }: { board: any }) => {
   const dispatch = useDispatch()
-  const { tasks } = useSelector((state: RootState) => state.tasks)
+  const { tasks,loading } = useSelector((state: RootState) => state.tasks)
   const [open, setOpen] = useState(false)
   const [editTask, setEditTask] = useState<any>(null)
   const [deleteTask, setDeleteTask] = useState<any>(null)
@@ -174,7 +175,14 @@ const BoardView = ({ board }: { board: any }) => {
         {col}
       </div>
 
-                  {filteredTasks
+                  {
+                  loading ? (
+          <>
+            <TaskCardSkeleton />
+            <TaskCardSkeleton />
+          </>
+        ) :
+                  filteredTasks
                     ?.filter((t: any) => t.status === col)
                     .sort((a: any, b: any) => a.position - b.position)
                     .map((task: any, index: number) => (
