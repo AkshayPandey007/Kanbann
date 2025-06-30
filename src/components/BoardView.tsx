@@ -13,7 +13,9 @@ import {
   deleteTaskSlice,
   fetchTasksByBoard,
   reorderTasks,
-  updateTask
+  reorderTasksLocally,
+  updateTask,
+  updateTaskStatusLocally
 } from '../redux/Feature/taskSlice'
 import TaskCardSkeleton from './TaskCardSkeleton'
 
@@ -73,6 +75,7 @@ const BoardView = ({ board }: { board: any }) => {
 
     // Dispatch updateTask if status has changed
     if (source.droppableId !== destination.droppableId) {
+        dispatch(updateTaskStatusLocally({ id: movedTask._id, status: destination.droppableId }));
       dispatch(
         updateTask({
           id: movedTask._id,
@@ -80,7 +83,7 @@ const BoardView = ({ board }: { board: any }) => {
         }) as any
       )
     }
-
+dispatch(reorderTasksLocally(reorderedTasks) as any);
     // Reorder in backend
     try {
       await dispatch(reorderTasks(reorderedTasks) as any)

@@ -91,7 +91,25 @@ const initialState: TaskState = {
 const taskSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+   reorderTasksLocally: (state, action) => {
+    const updated = action.payload;
+    updated.forEach((u: any) => {
+      const task = state.tasks.find((t: any) => t._id === u._id);
+      if (task) {
+        task.position = u.position;
+        task.status = u.status;
+      }
+    });
+  },
+  updateTaskStatusLocally: (state, action) => {
+    const { id, status } = action.payload;
+    const task = state.tasks.find((t: any) => t._id === id);
+    if (task) {
+      task.status = status;
+    }
+  },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasksByBoard.pending, (state) => {
@@ -139,3 +157,4 @@ const taskSlice = createSlice({
 });
 
 export default taskSlice.reducer;
+export const { reorderTasksLocally,updateTaskStatusLocally } = taskSlice.actions;
